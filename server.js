@@ -10,14 +10,14 @@ console.log("Modules loaded successfully");
 
 // Add signal handlers to debug SIGTERM
 process.on("SIGTERM", () => {
-  console.error("SIGTERM signal received: shutting down");
+  console.error("SIGTERM signal received: shutting down gracefully");
   console.error("Stack trace:", new Error().stack);
-  process.exit(1);
+  // Don't exit immediately, let Railway handle graceful shutdown
 });
 
 process.on("SIGINT", () => {
   console.error("SIGINT signal received: shutting down");
-  process.exit(1);
+  process.exit(0);
 });
 
 process.on("uncaughtException", (err) => {
@@ -47,6 +47,13 @@ app.prepare()
     console.log("Next.js app prepared successfully");
 
     const server = createServer(async (req, res) => {
+      // Health check endpoint for Railway
+      if (req.url === "/health") {
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ status: "ok" }));
+        return;
+      }
+
       try {
         const parsedUrl = parse(req.url, true);
         await handle(req, res, parsedUrl);
@@ -68,6 +75,7 @@ app.prepare()
       console.log(`> Ready on http://${hostname}:${port}`);
       console.log("Server is running and accepting connections");
       console.log("Process ID:", process.pid);
+      console.log("Health check available at http://" + hostname + ":" + port + "/health");
     });
 
     console.log("Server listen() called");
