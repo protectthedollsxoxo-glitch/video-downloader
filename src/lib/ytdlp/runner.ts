@@ -45,7 +45,7 @@ export function mapYtdlpError(error: unknown): string {
   }
 
   if (message.includes("confirm your age") || message.includes("sign in")) {
-    return "This video requires sign-in and cannot be downloaded.";
+    return "This video requires sign-in or age verification. Try a different video that doesn't require login.";
   }
 
   if (message.includes("unsupported url") || message.includes("no video")) {
