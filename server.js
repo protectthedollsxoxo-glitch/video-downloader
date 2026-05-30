@@ -49,11 +49,14 @@ app.prepare()
     const server = createServer(async (req, res) => {
       // Health check endpoint for Railway
       if (req.url === "/health") {
+        console.log("Health check request received");
         res.writeHead(200, { "Content-Type": "application/json" });
         res.end(JSON.stringify({ status: "ok" }));
+        console.log("Health check response sent");
         return;
       }
 
+      console.log("Request received:", req.url);
       try {
         const parsedUrl = parse(req.url, true);
         await handle(req, res, parsedUrl);
