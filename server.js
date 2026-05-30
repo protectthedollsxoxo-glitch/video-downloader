@@ -50,8 +50,8 @@ app.prepare()
       // Health check endpoint for Railway
       if (req.url === "/health") {
         console.log("Health check request received");
-        res.writeHead(200, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ status: "ok" }));
+        res.writeHead(200);
+        res.end("ok");
         console.log("Health check response sent");
         return;
       }
