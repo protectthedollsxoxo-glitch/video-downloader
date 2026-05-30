@@ -8,18 +8,6 @@ const next = require("next");
 
 console.log("Modules loaded successfully");
 
-// Add signal handlers to debug SIGTERM
-process.on("SIGTERM", () => {
-  console.error("SIGTERM signal received: shutting down gracefully");
-  console.error("Stack trace:", new Error().stack);
-  // Don't exit immediately, let Railway handle graceful shutdown
-});
-
-process.on("SIGINT", () => {
-  console.error("SIGINT signal received: shutting down");
-  process.exit(0);
-});
-
 process.on("uncaughtException", (err) => {
   console.error("Uncaught Exception:", err);
   console.error("Stack trace:", err.stack);
