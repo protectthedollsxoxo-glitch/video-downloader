@@ -8,6 +8,29 @@ const next = require("next");
 
 console.log("Modules loaded successfully");
 
+// Add signal handlers to debug SIGTERM
+process.on("SIGTERM", () => {
+  console.error("SIGTERM signal received: shutting down");
+  console.error("Stack trace:", new Error().stack);
+  process.exit(1);
+});
+
+process.on("SIGINT", () => {
+  console.error("SIGINT signal received: shutting down");
+  process.exit(1);
+});
+
+process.on("uncaughtException", (err) => {
+  console.error("Uncaught Exception:", err);
+  console.error("Stack trace:", err.stack);
+  process.exit(1);
+});
+
+process.on("unhandledRejection", (reason, promise) => {
+  console.error("Unhandled Rejection at:", promise, "reason:", reason);
+  process.exit(1);
+});
+
 const dev = process.env.NODE_ENV !== "production";
 const hostname = "0.0.0.0";
 const port = process.env.PORT || 3000;
@@ -36,7 +59,7 @@ app.prepare()
 
     console.log("HTTP server created");
 
-    server.once("error", (err) => {
+    server.on("error", (err) => {
       console.error("Server error:", err);
       process.exit(1);
     });
@@ -44,12 +67,19 @@ app.prepare()
     server.listen(port, hostname, () => {
       console.log(`> Ready on http://${hostname}:${port}`);
       console.log("Server is running and accepting connections");
+      console.log("Process ID:", process.pid);
     });
 
     console.log("Server listen() called");
+
+    // Keep the process alive
+    setInterval(() => {
+      // Heartbeat to keep process alive
+    }, 60000);
   })
   .catch((err) => {
     console.error("Failed to prepare Next.js app:", err);
+    console.error("Stack trace:", err.stack);
     process.exit(1);
   });
 
