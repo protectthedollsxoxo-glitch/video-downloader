@@ -32,11 +32,11 @@ export async function fetchVideoInfo(url: string): Promise<YtdlpVideoInfo> {
     "chrome",
     "--force-ipv4",
     "--socket-timeout",
-    "60",
+    "15",
     "--retries",
-    "3",
+    "1",
     "--fragment-retries",
-    "3",
+    "1",
     cleanedUrl,
   ];
 

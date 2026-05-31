@@ -4,7 +4,7 @@ import { detectVideoUrl } from "@/lib/utils/url-detector";
 import type { AnalyzeErrorResponse, AnalyzeResponse } from "@/types/video";
 import { NextResponse } from "next/server";
 
-export const maxDuration = 60;
+export const maxDuration = 120;
 
 export async function POST(request: Request) {
   let body: { url?: string };

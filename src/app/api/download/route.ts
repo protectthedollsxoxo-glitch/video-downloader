@@ -12,7 +12,7 @@ import type { AnalyzeErrorResponse, DownloadRequest, QualityId } from "@/types/v
 import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
-export const maxDuration = 300;
+export const maxDuration = 120;
 
 const VALID_QUALITIES = new Set<QualityId>(["480p", "720p", "1080p", "4K"]);
 
