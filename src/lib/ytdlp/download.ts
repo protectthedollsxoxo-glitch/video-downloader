@@ -71,10 +71,12 @@ export function downloadFormat(
     });
 
     proc.on("error", (error) => {
+      console.error("[yt-dlp] Download process error:", error);
       reject(error);
     });
 
     proc.on("close", (code) => {
+      console.error("[yt-dlp] Download process closed with code:", code, "stderr:", stderr.slice(-500));
       if (code !== 0) {
         reject(
           new Error(

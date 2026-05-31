@@ -40,13 +40,21 @@ export async function fetchVideoInfo(url: string): Promise<YtdlpVideoInfo> {
 
   console.log("[yt-dlp] Executing command:", ytdlp, args.join(" "));
 
-  const { stdout } = await execFileAsync(ytdlp, args, {
-    maxBuffer: 50 * 1024 * 1024,
-    timeout: 90_000,
-    windowsHide: true,
-  });
+  try {
+    const { stdout } = await execFileAsync(ytdlp, args, {
+      maxBuffer: 50 * 1024 * 1024,
+      timeout: 90_000,
+      windowsHide: true,
+    });
 
-  return JSON.parse(stdout) as YtdlpVideoInfo;
+    return JSON.parse(stdout) as YtdlpVideoInfo;
+  } catch (error) {
+    console.error("[yt-dlp] Command failed:", error);
+    if (error instanceof Error && "stderr" in error) {
+      console.error("[yt-dlp] stderr:", (error as any).stderr);
+    }
+    throw error;
+  }
 }
 
 export function mapYtdlpError(error: unknown): string {
