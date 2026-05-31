@@ -10,11 +10,19 @@ export function getYtdlpPath(): string {
 }
 
 /**
+ * Strips query parameters from URLs to avoid shell escaping issues.
+ */
+function cleanUrl(url: string): string {
+  return url.split("?")[0];
+}
+
+/**
  * Fetches video metadata and all available stream formats via yt-dlp JSON output.
  * Uses --no-download so we only query format codes needed for quality selection.
  */
 export async function fetchVideoInfo(url: string): Promise<YtdlpVideoInfo> {
   const ytdlp = getYtdlpPath();
+  const cleanedUrl = cleanUrl(url);
 
   const args = [
     "--dump-single-json",
@@ -27,7 +35,7 @@ export async function fetchVideoInfo(url: string): Promise<YtdlpVideoInfo> {
     "--no-check-certificate",
     "--extractor-args",
     "tiktok:api_host=api-tiktok.snssdk.com",
-    url,
+    cleanedUrl,
   ];
 
   console.log("[yt-dlp] Executing command:", ytdlp, args.join(" "));

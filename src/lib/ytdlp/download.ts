@@ -5,6 +5,13 @@ import { resolveExecutable } from "@/lib/binaries";
 const YTDLP_PROGRESS_RE = /\[download\]\s+(\d+(?:\.\d+)?)%/;
 
 /**
+ * Strips query parameters from URLs to avoid shell escaping issues.
+ */
+function cleanUrl(url: string): string {
+  return url.split("?")[0];
+}
+
+/**
  * Downloads a single yt-dlp format and reports progress from stderr.
  * Uses --newline so each progress update is on its own line.
  */
@@ -16,6 +23,7 @@ export function downloadFormat(
 ): Promise<string> {
   return new Promise((resolve, reject) => {
     const ytdlp = resolveExecutable("yt-dlp");
+    const cleanedUrl = cleanUrl(url);
     const args = [
       "-f",
       formatId,
@@ -35,7 +43,7 @@ export function downloadFormat(
       "tiktok:api_host=api-tiktok.snssdk.com",
       "-o",
       outputTemplate,
-      url,
+      cleanedUrl,
     ];
 
     console.log("[yt-dlp] Executing download command:", ytdlp, args.join(" "));
