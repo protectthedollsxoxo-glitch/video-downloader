@@ -1,5 +1,8 @@
 [phases.build]
-cmds = ["npm run build"]
+cmds = [
+  "npm run build",
+  "pip3 install yt-dlp"
+]
 
 [phases.start]
 cmds = ["npm run start"]
@@ -7,10 +10,3 @@ cmds = ["npm run start"]
 [static]
 # Install system dependencies
 aptPkgs = ["ffmpeg", "python3", "python3-pip"]
-
-# Install yt-dlp
-[phases.build.cmds]
-cmds = [
-  "npm run build",
-  "pip3 install yt-dlp"
-]
