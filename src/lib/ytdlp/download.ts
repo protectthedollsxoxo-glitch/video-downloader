@@ -26,10 +26,19 @@ export function downloadFormat(
       "--progress",
       "--print",
       "after_move:filepath",
+      "--user-agent",
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+      "--referer",
+      "https://www.tiktok.com/",
+      "--no-check-certificate",
+      "--extractor-args",
+      "tiktok:api_host=api-tiktok.snssdk.com",
       "-o",
       outputTemplate,
       url,
     ];
+
+    console.log("[yt-dlp] Executing download command:", ytdlp, args.join(" "));
 
     const proc = spawn(ytdlp, args, { windowsHide: true });
     let stdout = "";

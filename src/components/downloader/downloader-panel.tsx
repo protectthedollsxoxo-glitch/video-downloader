@@ -49,11 +49,17 @@ export function DownloaderPanel() {
 
     setLoading(true);
     try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 45000);
+
       const response = await fetch("/api/analyze", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ url: url.trim() }),
+        signal: controller.signal,
       });
+
+      clearTimeout(timeoutId);
 
       const data = (await response.json()) as AnalyzeResponse & {
         error?: string;
@@ -90,6 +96,9 @@ export function DownloaderPanel() {
     });
 
     try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 45000);
+
       const response = await fetch("/api/download", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -101,7 +110,10 @@ export function DownloaderPanel() {
           needsMerge: quality.needsMerge,
           title: result.title,
         }),
+        signal: controller.signal,
       });
+
+      clearTimeout(timeoutId);
 
       const contentType = response.headers.get("content-type") ?? "";
 

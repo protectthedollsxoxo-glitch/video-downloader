@@ -16,15 +16,27 @@ export function getYtdlpPath(): string {
 export async function fetchVideoInfo(url: string): Promise<YtdlpVideoInfo> {
   const ytdlp = getYtdlpPath();
 
-  const { stdout } = await execFileAsync(
-    ytdlp,
-    ["--dump-single-json", "--no-playlist", "--no-warnings", url],
-    {
-      maxBuffer: 50 * 1024 * 1024,
-      timeout: 90_000,
-      windowsHide: true,
-    },
-  );
+  const args = [
+    "--dump-single-json",
+    "--no-playlist",
+    "--no-warnings",
+    "--user-agent",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "--referer",
+    "https://www.tiktok.com/",
+    "--no-check-certificate",
+    "--extractor-args",
+    "tiktok:api_host=api-tiktok.snssdk.com",
+    url,
+  ];
+
+  console.log("[yt-dlp] Executing command:", ytdlp, args.join(" "));
+
+  const { stdout } = await execFileAsync(ytdlp, args, {
+    maxBuffer: 50 * 1024 * 1024,
+    timeout: 90_000,
+    windowsHide: true,
+  });
 
   return JSON.parse(stdout) as YtdlpVideoInfo;
 }
