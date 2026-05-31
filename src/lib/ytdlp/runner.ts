@@ -35,6 +35,12 @@ export async function fetchVideoInfo(url: string): Promise<YtdlpVideoInfo> {
     "--no-check-certificate",
     "--extractor-args",
     "tiktok:api_host=api-tiktok.snssdk.com",
+    "--socket-timeout",
+    "60",
+    "--retries",
+    "3",
+    "--fragment-retries",
+    "3",
     cleanedUrl,
   ];
 
