@@ -102,6 +102,11 @@ export function resolveExecutable(name: "yt-dlp" | "ffmpeg"): string {
   const fromEnv = process.env[envKey]?.trim();
   if (fromEnv && existsSync(fromEnv)) return fromEnv;
 
+  // Linux/Railway: use system PATH
+  if (process.platform !== "win32") {
+    return name;
+  }
+
   const winName = name === "yt-dlp" ? "yt-dlp.exe" : "ffmpeg.exe";
 
   const fromWhere = findOnWindows(winName);
