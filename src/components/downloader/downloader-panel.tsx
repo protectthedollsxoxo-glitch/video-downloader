@@ -50,7 +50,7 @@ export function DownloaderPanel() {
     setLoading(true);
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 45000);
+      const timeoutId = setTimeout(() => controller.abort(), 120000);
 
       const response = await fetch("/api/analyze", {
         method: "POST",
@@ -97,7 +97,7 @@ export function DownloaderPanel() {
 
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 45000);
+      const timeoutId = setTimeout(() => controller.abort(), 120000);
 
       const response = await fetch("/api/download", {
         method: "POST",
